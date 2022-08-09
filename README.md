@@ -9,7 +9,7 @@
 ```bash
 docker login
 
-docker tag [docker_image_name]:[tag_name1] dockerhub_id/[docker_image_name]:[tag_name2]
+docker tag [docker_image_name]:[tag_name1] [dockerhub_id]/[docker_image_name]:[tag_name2]
 
 docker push [dockerhub_id]/[docker_image_name]:[tag_name2]
 
