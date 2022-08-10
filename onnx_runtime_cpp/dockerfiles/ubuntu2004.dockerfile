@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,6 +19,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+FROM ubuntu:20.04
+
 WORKDIR /workspace
+
+COPY --from=build / /
 
 ENTRYPOINT ["/bin/bash"]

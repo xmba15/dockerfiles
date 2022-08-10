@@ -18,6 +18,10 @@ function urldecode { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 ZIP_FILE_NAME=$(urldecode $TORCH_URL)
 ZIP_FILE_NAME=$(basename $ZIP_FILE_NAME)
 
+sudo apt-get install -y --no-install-recommends \
+    wget \
+    unzip
+
 wget $TORCH_URL -P $BUILD_DIR
 cd $BUILD_DIR && unzip $ZIP_FILE_NAME
 

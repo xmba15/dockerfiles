@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,14 +13,16 @@ RUN apt-get update && \
         build-essential \
         software-properties-common \
         cmake \
-        wget \
-        unzip \
         git && \
     bash install_libtorch.bash && \
     rm -rf /build && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+FROM ubuntu:20.04
+
 WORKDIR /workspace
+
+COPY --from=build / /
 
 ENTRYPOINT ["/bin/bash"]
