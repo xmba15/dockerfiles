@@ -4,6 +4,9 @@
 
 ```bash
 docker build -f ./dockerfiles/ubuntu2004.dockerfile -t torch_cpp .
+
+# gpu
+docker build -f ./dockerfiles/ubuntu2004_gpu.dockerfile -t torch_cpp_gpu .
 ```
 
 - Use [libtorch](https://pytorch.org/) with CMake:
