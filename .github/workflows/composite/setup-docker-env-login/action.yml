@@ -1,0 +1,23 @@
+inputs:
+  dockerhub_username:
+    required: true
+
+  dockerhub_password:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.x"
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ inputs.dockerhub_username }}
+        password: ${{ inputs.dockerhub_password }}
