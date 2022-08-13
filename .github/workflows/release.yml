@@ -1,0 +1,77 @@
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  ros:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: ros
+        run: |
+          cd ros
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros .
+          docker tag ros:latest ${{ secrets.DOCKER_USERNAME }}/ros:noetic-ubuntu20.04
+          docker push ${{ secrets.DOCKER_USERNAME }}/ros:noetic-ubuntu20.04
+          docker image prune -f
+
+  ros2:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: ros2
+        run: |
+          cd ros2
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros2 .
+          docker tag ros2:latest ${{ secrets.DOCKER_USERNAME }}/ros2:galactic-ubuntu20.04
+          docker push ${{ secrets.DOCKER_USERNAME }}/ros2:galactic-ubuntu20.04
+          docker image prune -f
+
+  torch_cpp:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: torch_cpp
+        run: |
+          cd torch_cpp
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t torch_cpp .
+          docker tag torch_cpp:latest ${{ secrets.DOCKER_USERNAME }}/torch_cpp:1.12.1-ubuntu20.04
+          docker push ${{ secrets.DOCKER_USERNAME }}/torch_cpp:1.12.1-ubuntu20.04
+          docker image prune -f
+
+  onnx_runtime_cpp:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env-login
+        with:
+          dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+          dockerhub_password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: onnx_runtime_cpp
+        run: |
+          cd onnx_runtime_cpp
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t onnx_runtime_cpp .
+          docker tag onnx_runtime_cpp:latest ${{ secrets.DOCKER_USERNAME }}/onnx_runtime_cpp:v1.10.0-ubuntu20.04
+          docker push ${{ secrets.DOCKER_USERNAME }}/onnx_runtime_cpp:v1.10.0-ubuntu20.04
+          docker image prune -f

@@ -1,0 +1,72 @@
+name: Build
+
+on:
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  linting:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Apply pre-commit
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all-files
+
+  ros:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env
+
+      - name: ros
+        run: |
+          cd ros
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros .
+          docker image prune -f
+
+  ros2:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env
+
+      - name: ros2
+
+        run: |
+          cd ros2
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros2 .
+          docker image prune -f
+
+  torch_cpp:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env
+
+      - name: torch_cpp
+        run: |
+          cd torch_cpp
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t torch_cpp .
+          docker image prune -f
+
+  onnx_runtime_cpp:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/composite/setup-docker-env
+
+      - name: onnx_runtime_cpp
+        run: |
+          cd onnx_runtime_cpp
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t onnx_runtime_cpp .
+          docker image prune -f
