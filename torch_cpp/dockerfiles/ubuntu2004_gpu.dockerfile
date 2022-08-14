@@ -23,6 +23,6 @@ FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu20.04
 
 WORKDIR /workspace
 
-COPY --from=build /opt/libtorch /opt/libtorch
+COPY --from=build / /
 
 ENTRYPOINT ["/bin/bash"]

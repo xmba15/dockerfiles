@@ -1,0 +1,31 @@
+inputs:
+  directory_name:
+    required: true
+
+  dockerhub_username:
+    required: true
+
+  tag_name:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: ${{ inputs.directory_name }}
+      run: |
+        num_tags=`git tag --sort=-version:refname | wc -l`
+        if [[ $num_tags > 1 ]]; then
+           latest_tag=`git tag --sort=-version:refname | head -n1`
+           previous_tag=`git tag --sort=-version:refname | head -n2 | tail -n1`
+           if [[ ! `git diff "$latest_tag" "$previous_tag" ${{ inputs.directory_name }}` ]]; then
+              exit 0
+           fi
+        fi
+
+        cd ${{ inputs.directory_name }}
+        docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ${{ inputs.directory_name }} .
+        docker tag ${{ inputs.directory_name }}:latest ${{ inputs.dockerhub_username }}/${{ inputs.directory_name }}:${{ inputs.tag_name }}
+        docker push ${{ inputs.dockerhub_username }}/${{ inputs.directory_name }}:${{ inputs.tag_name }}
+        docker image prune -f
+
+      shell: bash
