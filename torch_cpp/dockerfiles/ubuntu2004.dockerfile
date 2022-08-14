@@ -23,6 +23,6 @@ FROM ubuntu:20.04
 
 WORKDIR /workspace
 
-COPY --from=build / /
+COPY --from=build /opt/libtorch /opt/libtorch
 
 ENTRYPOINT ["/bin/bash"]
