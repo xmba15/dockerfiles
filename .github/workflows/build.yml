@@ -25,10 +25,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env
 
       - name: ros
         run: |
+          if [[ ! `git diff ${{github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} ros` ]]; then
+             exit 0
+          fi
+
           cd ros
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros .
           docker image prune -f
@@ -38,11 +44,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env
 
       - name: ros2
 
         run: |
+          if [[ ! `git diff ${{github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} ros2` ]]; then
+             exit 0
+          fi
+
           cd ros2
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros2 .
           docker image prune -f
@@ -51,10 +63,16 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env
 
       - name: torch_cpp
         run: |
+          if [[ ! `git diff ${{github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} torch_cpp` ]]; then
+             exit 0
+          fi
+
           cd torch_cpp
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t torch_cpp .
           docker image prune -f
@@ -63,10 +81,16 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env
 
       - name: onnx_runtime_cpp
         run: |
+          if [[ ! `git diff ${{github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} onnx_runtime_cpp` ]]; then
+             exit 0
+          fi
+
           cd onnx_runtime_cpp
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t onnx_runtime_cpp .
           docker image prune -f

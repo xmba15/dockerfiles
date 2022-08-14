@@ -25,14 +25,11 @@ sudo apt-get install -y --no-install-recommends \
 wget $TORCH_URL -P $BUILD_DIR
 cd $BUILD_DIR && unzip $ZIP_FILE_NAME
 
-INSTALL_DIR=/opt/libtorch
+INSTALL_DIR=/opt
 echo "Installing into $INSTALL_DIR"
 
 sudo -l
 
-sudo mkdir -p $INSTALL_DIR
-sudo cp -r libtorch/lib ${INSTALL_DIR}/
-sudo cp -r libtorch/share ${INSTALL_DIR}/
-sudo cp -r libtorch/include ${INSTALL_DIR}/
+sudo mv libtorch $INSTALL_DIR/
 
 cd && rm -rf $BUILD_DIR

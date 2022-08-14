@@ -1,7 +1,9 @@
+name: Release
+
 on:
-  release:
-    types:
-      - created
+  push:
+    branches:
+      - master
 
 jobs:
   ros:
@@ -9,6 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env-login
         with:
           dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
@@ -16,6 +20,10 @@ jobs:
 
       - name: ros
         run: |
+          if [[ ! `git diff ${{ github.event.push.head.sha }} ${{ github.event.push.base.sha }} ros` ]]; then
+             exit 0
+          fi
+
           cd ros
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros .
           docker tag ros:latest ${{ secrets.DOCKER_USERNAME }}/ros:noetic-ubuntu20.04
@@ -27,6 +35,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env-login
         with:
           dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
@@ -34,6 +44,10 @@ jobs:
 
       - name: ros2
         run: |
+          if [[ ! `git diff ${{ github.event.push.head.sha }} ${{ github.event.push.base.sha }} ros2` ]]; then
+             exit 0
+          fi
+
           cd ros2
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t ros2 .
           docker tag ros2:latest ${{ secrets.DOCKER_USERNAME }}/ros2:galactic-ubuntu20.04
@@ -45,6 +59,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env-login
         with:
           dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
@@ -52,6 +68,10 @@ jobs:
 
       - name: torch_cpp
         run: |
+          if [[ ! `git diff ${{ github.event.push.head.sha }} ${{ github.event.push.base.sha }} torch_cpp` ]]; then
+             exit 0
+          fi
+
           cd torch_cpp
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t torch_cpp .
           docker tag torch_cpp:latest ${{ secrets.DOCKER_USERNAME }}/torch_cpp:1.12.1-ubuntu20.04
@@ -63,6 +83,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: ./.github/workflows/composite/setup-docker-env-login
         with:
           dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
@@ -70,6 +92,10 @@ jobs:
 
       - name: onnx_runtime_cpp
         run: |
+          if [[ ! `git diff ${{ github.event.push.head.sha }} ${{ github.event.push.base.sha }} onnx_runtime_cpp` ]]; then
+             exit 0
+          fi
+
           cd onnx_runtime_cpp
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t onnx_runtime_cpp .
           docker tag onnx_runtime_cpp:latest ${{ secrets.DOCKER_USERNAME }}/onnx_runtime_cpp:v1.10.0-ubuntu20.04
