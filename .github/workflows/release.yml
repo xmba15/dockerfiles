@@ -76,4 +76,4 @@ jobs:
         with:
           directory_name: onnx_runtime_cpp
           dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
-          tag_name: v1.10.0-ubuntu20.04
+          tag_name: v1.14.1-ubuntu20.04
