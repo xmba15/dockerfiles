@@ -94,3 +94,21 @@ jobs:
           cd onnx_runtime_cpp
           docker build -f ./dockerfiles/ubuntu2004.dockerfile -t onnx_runtime_cpp .
           docker image prune -f
+
+  open_dynamics_engine:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ./.github/workflows/composite/setup-docker-env
+
+      - name: open_dynamics_engine
+        run: |
+          if [[ ! `git diff ${{github.event.pull_request.head.sha }} ${{ github.event.pull_request.base.sha }} open_dynamics_engine` ]]; then
+             exit 0
+          fi
+
+          cd open_dynamics_engine
+          docker build -f ./dockerfiles/ubuntu2004.dockerfile -t open_dynamics_engine .
+          docker image prune -f
