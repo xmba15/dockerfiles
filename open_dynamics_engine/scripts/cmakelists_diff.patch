@@ -1,0 +1,37 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0a65e899..7e1e7672 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -913,6 +913,32 @@ install(
+ 	FILE ode-export.cmake
+ 	COMPONENT development
+ )
++install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/drawstuff DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++
++install(DIRECTORY ${PROJECT_SOURCE_DIR}/drawstuff/textures DESTINATION /opt/drawstuff)
++
++install(TARGETS drawstuff
++  EXPORT drawstuff
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++)
++configure_package_config_file(
++  ${CMAKE_CURRENT_SOURCE_DIR}/drawstuff-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/drawstuff-config.cmake
++  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/drawstuff
++)
++
++install(
++  FILES ${CMAKE_CURRENT_BINARY_DIR}/drawstuff-config.cmake
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/drawstuff
++)
++
++install(
++  EXPORT drawstuff
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/drawstuff
++  NAMESPACE drawstuff::
++  FILE drawstuff-export.cmake
++)
+
+ configure_file(cmake/cmake_uninstall.cmake.in cmake_uninstall.cmake @ONLY)
+ add_custom_target(uninstall ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
